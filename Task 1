@@ -111,7 +111,7 @@ def load_train_dataset(train_path, augment_factor=1):
                         X.append(feat_aug)
                         y.append(label_name)
                         file_names.append(file + "_aug")
-        print(f"✅ Loaded {count} files from {label_name}")
+        print(f" Loaded {count} files from {label_name}")
     return np.array(X), np.array(y), np.array(file_names)
 
 def load_test_dataset(test_path):
@@ -123,7 +123,7 @@ def load_test_dataset(test_path):
             if feat is not None:
                 X.append(feat)
                 file_names.append(file)
-    print(f"✅ Loaded {len(X)} test files")
+    print(f" Loaded {len(X)} test files")
     return np.array(X), file_names
 
 # ====================================================
@@ -156,7 +156,7 @@ X_train, X_val, y_train, y_val, _, _ = train_test_split(
 # STEP 7: TORCH CONVERSION
 # ====================================================
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"\n✅ Using device: {device}")
+print(f"\n Using device: {device}")
 
 X_train = torch.tensor(X_train, dtype=torch.float32)
 y_train = torch.tensor(y_train, dtype=torch.long)
@@ -172,7 +172,7 @@ input_size = X_full.shape[1]   # number of features per sample
 num_classes = len(np.unique(y_full))  # total output classes
 
 # ====================================================
-# MODEL (clean feedforward baseline for 90–95% accuracy)
+# MODEL 
 # ====================================================
 
 model = nn.Sequential(
@@ -261,11 +261,11 @@ for epoch in range(epochs):
         best_val_acc = val_acc
         patience_counter = 0
         torch.save(model.state_dict(), "best_model.pth")
-        print("✅ Model improved and saved!")
+        print(" Model improved and saved!")
     else:
         patience_counter += 1
         if patience_counter >= patience:
-            print("⏹️ Early stopping triggered.")
+            print("Early stopping triggered.")
             break
 
     # Validation
@@ -289,17 +289,17 @@ for epoch in range(epochs):
         best_val_acc = val_acc
         patience_counter = 0
         torch.save(model.state_dict(), "best_model.pth")
-        print("✅ Model improved and saved!")
+        print(" Model improved and saved!")
     else:
         patience_counter += 1
         if patience_counter >= patience:
-            print("⏹️ Early stopping triggered.")
+            print(" Early stopping triggered.")
             break
 
 # ====================================================
 # STEP 11: INFERENCE
 # ====================================================
-print("\n🚀 Generating predictions on test set...")
+print("\n Generating predictions on test set...")
 model.load_state_dict(torch.load("best_model.pth", map_location=device))
 model.eval()
 
